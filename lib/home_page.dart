@@ -86,7 +86,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Notes")),
+      appBar: AppBar(
+        title: Column(
+          children: [
+            Text(FirebaseAuth.instance.currentUser?.email ?? "User"),
+            Text("Notes")
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: openNoteBox,
         child: const Icon(Icons.add),
