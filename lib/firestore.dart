@@ -5,18 +5,19 @@ class FirestoreService{
   final CollectionReference notes = FirebaseFirestore.instance.collection('notes');
 
   //create new note
-  Future<void> addNote(String title, String content, String label) {
+  Future<void> addNote(String title, String content, String label, String uid) {
     return notes.add({
       'title': title,
       'content': content,
       'createdAt': Timestamp.now(),
       'label':label,
+      'uid':uid,
     });
   }
 
   //fetch all notes
-  Stream<QuerySnapshot> getNotes() {
-    return notes.orderBy('createdAt', descending: true).snapshots();
+  Stream<QuerySnapshot> getNotes(String uid) {
+    return notes.where('uid', isEqualTo: uid).orderBy('createdAt', descending: true).snapshots();
   }
 
   //update notes

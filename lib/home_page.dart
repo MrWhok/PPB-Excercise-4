@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firestore.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,6 +11,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final String currentUserId = FirebaseAuth.instance.currentUser!.uid;
   final titleTextController = TextEditingController();
   final contentTextController = TextEditingController();
   final labelTextController = TextEditingController();
@@ -57,6 +59,7 @@ class _HomePageState extends State<HomePage> {
                     titleTextController.text,
                     contentTextController.text,
                     labelTextController.text,
+                    currentUserId,
                   );
                 } else {
                   firestoreService.updateNote(
@@ -89,7 +92,7 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: firestoreService.getNotes(),
+        stream: firestoreService.getNotes(currentUserId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List notesList = snapshot.data!.docs;
